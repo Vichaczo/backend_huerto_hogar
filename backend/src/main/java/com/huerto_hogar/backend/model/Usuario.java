@@ -1,9 +1,6 @@
 package com.huerto_hogar.backend.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-
 @Table(name = "usuarios")
 public class Usuario {
 
@@ -28,6 +24,12 @@ public class Usuario {
     private String telefono;
     private String direccion;
 
-    @Builder.Default
-    private String rol = "usuario";
+    private String rol;
+
+    @PrePersist
+    public void antesDeGuardar() {
+        if (this.rol == null || this.rol.isEmpty()) {
+            this.rol = "usuario";
+        }
+    }
 }
