@@ -2,7 +2,9 @@ package com.huerto_hogar.backend.service;
 
 import com.huerto_hogar.backend.model.CarritoItem;
 import com.huerto_hogar.backend.model.Orden;
+import com.huerto_hogar.backend.model.Producto;
 import com.huerto_hogar.backend.repository.OrdenRepository;
+import com.huerto_hogar.backend.repository.ProductoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +18,8 @@ import java.util.List;
 public class OrdenService {
 
     private final OrdenRepository ordenRepo;
-    private final CarritoService carritoService; // Necesario para obtener los precios y vaciar
+    private final CarritoService carritoService;
+    private final ProductoRepository productoRepo; // NECESARIO para actualizar stock
 
     // Importante: Si falla el guardado, no se vacía el carrito (seguridad)
     public Orden generarOrden(String uid) {
@@ -28,12 +31,23 @@ public class OrdenService {
             throw new RuntimeException("El carrito está vacío, no se puede realizar la compra.");
         }
 
-        // 2. Calcular el Total Matemático
+        // 2. Calcular el Total Matemático y ACTUALIZAR STOCK
         double totalCalculado = 0;
 
         for (CarritoItem item : items) {
+            Producto producto = item.getProducto();
+
+            // --- VALIDACIÓN DE STOCK ---
+            if (producto.getStock() < item.getCantidad()) {
+                throw new RuntimeException("No hay suficiente stock para el producto: " + producto.getNombre());
+            }
+
+            // --- RESTAR STOCK ---
+            producto.setStock(producto.getStock() - item.getCantidad());
+            productoRepo.save(producto); // Guardamos el nuevo stock en MySQL
+
             // Precio del producto * Cantidad que lleva
-            double subtotal = item.getProducto().getPrecio() * item.getCantidad();
+            double subtotal = producto.getPrecio() * item.getCantidad();
             totalCalculado += subtotal;
         }
 
