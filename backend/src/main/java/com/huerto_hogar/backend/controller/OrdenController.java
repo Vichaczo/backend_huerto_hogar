@@ -10,13 +10,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/ordenes")
-@CrossOrigin(origins = "*") // Vital para que React y Android puedan conectarse
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class OrdenController {
 
     private final OrdenService ordenService;
 
-    // 1. Finalizar Compra (Generar Orden y Vaciar Carrito)
+    // Finalizar Compra (Generar Orden y Vaciar Carrito)
     // POST /api/ordenes/comprar/{uid}
     @PostMapping("/comprar/{uid}")
     public ResponseEntity<?> comprar(@PathVariable String uid) {
@@ -32,7 +32,7 @@ public class OrdenController {
         }
     }
 
-    // 2. Ver Historial de Compras ("Mis Pedidos")
+    // Ver Historial de Compras ("Mis Pedidos")
     // GET /api/ordenes/{uid}
     @GetMapping("/{uid}")
     public ResponseEntity<List<Orden>> historial(@PathVariable String uid) {

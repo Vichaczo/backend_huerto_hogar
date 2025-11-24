@@ -19,9 +19,9 @@ public class OrdenService {
 
     private final OrdenRepository ordenRepo;
     private final CarritoService carritoService;
-    private final ProductoRepository productoRepo; // NECESARIO para actualizar stock
+    private final ProductoRepository productoRepo;
 
-    // Importante: Si falla el guardado, no se vacía el carrito (seguridad)
+    // Si falla el guardado, no se vacía el carrito
     public Orden generarOrden(String uid) {
 
         // 1. Obtener los items actuales del carrito

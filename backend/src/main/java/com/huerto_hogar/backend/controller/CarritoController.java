@@ -17,7 +17,7 @@ public class CarritoController {
 
     private final CarritoService carritoService;
 
-    // 1. Ver el carrito de un usuario
+    // Ver el carrito de un usuario
     // GET /api/carrito/{uid}
     @GetMapping("/{uid}")
     public ResponseEntity<List<CarritoItem>> verCarrito(@PathVariable String uid) {
@@ -25,7 +25,7 @@ public class CarritoController {
         return ResponseEntity.ok(items);
     }
 
-    // 2. Agregar producto al carrito
+    // Agregar producto al carrito
     // POST /api/carrito/agregar
     // Recibe JSON: { "uid": "A1B2...", "productoId": 10, "cantidad": 2 }
     @PostMapping("/agregar")
@@ -42,7 +42,7 @@ public class CarritoController {
         }
     }
 
-    // 3. Eliminar un item específico (ej: Sacar solo las Bananas)
+    // Eliminar un item específico (ej: Sacar solo las Bananas)
     // DELETE /api/carrito/item/{id}
     @DeleteMapping("/item/{id}")
     public ResponseEntity<Void> eliminarItem(@PathVariable Long id) {
@@ -50,7 +50,7 @@ public class CarritoController {
         return ResponseEntity.noContent().build();
     }
 
-    // 4. Vaciar todo el carrito (ej: Botón "Limpiar Carro")
+    // Vaciar todo el carrito (ej: Botón "Limpiar Carro")
     // DELETE /api/carrito/{uid}
     @DeleteMapping("/{uid}")
     public ResponseEntity<Void> vaciarCarrito(@PathVariable String uid) {

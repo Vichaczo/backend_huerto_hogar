@@ -16,14 +16,14 @@ public class ProductoController {
 
     private final ProductoService productoService;
 
-    // 1. Listar todos
+    // Listar todos
     // GET /api/productos
     @GetMapping
     public ResponseEntity<List<Producto>> listarTodos() {
         return ResponseEntity.ok(productoService.listarTodos());
     }
 
-    // 2. Obtener por ID
+    // Obtener por ID
     // GET /api/productos/{id}
     @GetMapping("/{id}")
     public ResponseEntity<Producto> obtenerPorId(@PathVariable Long id) {
@@ -34,7 +34,7 @@ public class ProductoController {
         return ResponseEntity.ok(producto);
     }
 
-    // 3. Filtrar por Categoría
+    // Filtrar por Categoría
     // GET /api/productos/categoria/{categoria}
     // Ejemplo: /api/productos/categoria/Frutas
     @GetMapping("/categoria/{categoria}")
@@ -42,21 +42,21 @@ public class ProductoController {
         return ResponseEntity.ok(productoService.listarPorCategoria(categoria));
     }
 
-    // 4. Buscar por nombre (NUEVO)
+    // Buscar por nombre
     // GET /api/productos/buscar?nombre=banana
     @GetMapping("/buscar")
     public ResponseEntity<List<Producto>> buscarPorNombre(@RequestParam String nombre) {
         return ResponseEntity.ok(productoService.buscarPorNombre(nombre));
     }
 
-    // 5. Crear o Actualizar Producto Completo (Admin)
+    // Crear o Actualizar Producto Completo (Admin)
     // POST /api/productos
     @PostMapping
     public ResponseEntity<Producto> guardar(@RequestBody Producto producto) {
         return ResponseEntity.ok(productoService.guardar(producto));
     }
 
-    // 6. Actualizar solo el Stock
+    // Actualizar solo el Stock
     // PATCH /api/productos/{id}/stock?cantidad=50
     @PatchMapping("/{id}/stock")
     public ResponseEntity<Void> actualizarStock(@PathVariable Long id, @RequestParam int cantidad) {
@@ -68,7 +68,7 @@ public class ProductoController {
         return ResponseEntity.ok().build();
     }
 
-    // 7. Eliminar Producto (Admin)
+    // Eliminar Producto
     // DELETE /api/productos/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {

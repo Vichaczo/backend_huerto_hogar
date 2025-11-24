@@ -12,7 +12,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     // Para obtener productos por categoría
     List<Producto> findByCategoria(String categoria);
 
-    // Para buscar productos por nombre (contiene)
+    // Para buscar productos por nombre
     List<Producto> findByNombreContainingIgnoreCase(String nombre);
 
 }

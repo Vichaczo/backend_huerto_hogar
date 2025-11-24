@@ -16,14 +16,14 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-    // 1. Guardar Usuario Nuevo (Registro inicial desde Firebase)
+    // Guardar Usuario Nuevo (Registro inicial desde Firebase)
     // POST /api/usuarios
     @PostMapping
     public ResponseEntity<Usuario> guardarUsuario(@RequestBody Usuario usuario) {
         return ResponseEntity.ok(usuarioService.guardarUsuario(usuario));
     }
 
-    // 2. Obtener Perfil por UID (Para ver roles o datos)
+    // Obtener Perfil por UID (Para ver roles o datos)
     // GET /api/usuarios/{uid}
     @GetMapping("/{uid}")
     public ResponseEntity<Usuario> obtenerUsuario(@PathVariable String uid) {
@@ -34,14 +34,14 @@ public class UsuarioController {
         return ResponseEntity.ok(u);
     }
 
-    // 3. Listar todos los usuarios (Útil para un panel de Admin)
+    // Listar todos los usuarios (CRUD ADMIN?)
     // GET /api/usuarios
     @GetMapping
     public ResponseEntity<List<Usuario>> listarUsuarios() {
         return ResponseEntity.ok(usuarioService.listarUsuarios());
     }
 
-    // 4. Actualizar datos del usuario (Dirección, Teléfono)
+    // Actualizar datos del usuario (Dirección, Teléfono)
     // PUT /api/usuarios/{uid}
     @PutMapping("/{uid}")
     public ResponseEntity<Usuario> actualizarUsuario(@PathVariable String uid, @RequestBody Usuario usuario) {
@@ -65,7 +65,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
-    // 5. Eliminar usuario (Admin)
+    // 5. Eliminar usuario
     // DELETE /api/usuarios/{uid}
     @DeleteMapping("/{uid}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable String uid) {
