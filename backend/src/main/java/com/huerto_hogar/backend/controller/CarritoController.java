@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/carrito")
-@CrossOrigin(origins = "*") // Permite que React (Web) y Android consuman la API sin bloqueos
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class CarritoController {
 
@@ -25,9 +25,9 @@ public class CarritoController {
         return ResponseEntity.ok(items);
     }
 
-    // Agregar producto al carrito
+    // Agregar o Restar producto
     // POST /api/carrito/agregar
-    // Recibe JSON: { "uid": "A1B2...", "productoId": 10, "cantidad": 2 }
+    // Body: { "uid": "...", "productoId": 1, "cantidad": 1 } -> Suma 1
     @PostMapping("/agregar")
     public ResponseEntity<?> agregar(@RequestBody SolicitudAgregar solicitud) {
         try {
@@ -35,35 +35,37 @@ public class CarritoController {
                     solicitud.getUid(),
                     solicitud.getProductoId(),
                     solicitud.getCantidad());
+
+            // Si devuelve null significa que el item se borró (llegó a 0)
+            if (item == null) {
+                return ResponseEntity.ok().body("Item eliminado del carrito");
+            }
             return ResponseEntity.ok(item);
         } catch (RuntimeException e) {
-            // Si el producto no existe, devolvemos error 404 o 400
+            // Si hay error de stock o validación, devolvemos 400 Bad Request
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    // Eliminar un item específico (ej: Sacar solo las Bananas)
-    // DELETE /api/carrito/item/{id}
+    // Eliminar un item específico
     @DeleteMapping("/item/{id}")
     public ResponseEntity<Void> eliminarItem(@PathVariable Long id) {
         carritoService.eliminarItem(id);
         return ResponseEntity.noContent().build();
     }
 
-    // Vaciar todo el carrito (ej: Botón "Limpiar Carro")
-    // DELETE /api/carrito/{uid}
+    // Vaciar carrito completo (Al comprar)
     @DeleteMapping("/{uid}")
     public ResponseEntity<Void> vaciarCarrito(@PathVariable String uid) {
         carritoService.vaciarCarrito(uid);
         return ResponseEntity.noContent().build();
     }
 
-    // --- DTO AUXILIAR ---
-    // Esta clase sirve solo para "atrapar" el JSON que envía el celular/web
+    // DTO Auxiliar
     @Data
     static class SolicitudAgregar {
-        private String uid; // Quién agrega
-        private Long productoId; // Qué agrega
-        private int cantidad; // Cuántos agrega
+        private String uid;
+        private Long productoId;
+        private int cantidad;
     }
 }
